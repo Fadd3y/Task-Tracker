@@ -11,7 +11,7 @@ public class Main {
             System.out.println("Enter request: ");
             request = new Request(scanner.nextLine());
 
-            request.printInfo();
+            //request.printInfo();
 
             if (request.isCorrect()) {
                 openActionsMenu(request.getAction());
@@ -31,17 +31,37 @@ public class Main {
 
     private static void addTask() {
         String description = request.getDescription();
+        TaskArchive.addTask(description);
     }
 
     private static void updateTask() {
+        String parameter = request.getParameter();
+        String description = request.getDescription();
+        int id = request.getId();
 
+        switch (parameter) {
+            case "-d" -> {
+                TaskArchive.updateTask(id, description);
+            }
+            case "-s" -> {
+                var status = request.getStatus();
+                TaskArchive.updateTask(id, status);
+            }
+        }
     }
 
     private static void deleteTask() {
-
+        int id = request.getId();
+        TaskArchive.deleteTask(id);
     }
 
     private static void listTask() {
+        if (request.getStatus() == null) {
+            TaskArchive.listTasks();
+        } else {
+            var status = request.getStatus();
+            TaskArchive.listTasks(status);
+        }
 
     }
 

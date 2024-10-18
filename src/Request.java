@@ -13,7 +13,8 @@ public class Request {
             case "add" -> handleAdd(request);
             case "delete" -> handleDelete(request);
             case "update" -> handleUpdate(request);
-            case "exit", "list" -> isCorrect = true;
+            case "exit" -> isCorrect = true;
+            case "list" -> handleList(request);
             default -> System.out.println(ErrorText.WRONG_ACTION_TYPE);
         }
     }
@@ -98,6 +99,25 @@ public class Request {
         return TaskStatus.contains(status);
     }
 
+    private void handleList(String request) {
+        String[] args = request.trim().split(" +", 2);
+        if (args.length == 1) {
+            isCorrect = true;
+            return;
+        }
+        if (isValidListRequest(args)) {
+            status = TaskStatus.valueOf(args[1].toUpperCase());
+            isCorrect = true;
+        } else {
+            System.out.println(ErrorText.STATUS_ERROR);
+            isCorrect = false;
+        }
+    }
+
+    private boolean isValidListRequest(String[] args) {
+        return args.length == 2 && isValidStatus(args[1]);
+    }
+
     public String getAction() {
         return action;
     }
@@ -117,5 +137,17 @@ public class Request {
         System.out.println("status: \t\t" + status);
         System.out.println("parameter: \t\t" + parameter);
         System.out.println("isCorrect: \t\t" + isCorrect);
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getParameter() {
+        return parameter;
+    }
+
+    public TaskStatus getStatus() {
+        return status;
     }
 }
