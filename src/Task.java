@@ -7,8 +7,8 @@ public class Task {
     private int id;
     private String description;
     private TaskStatus status;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    public LocalDateTime createdAt;
+    public LocalDateTime updatedAt;
 
     public Task(String description) {
         this.id = ++count;
@@ -39,7 +39,7 @@ public class Task {
         return status;
     }
 
-    public String getTimeOfCreation() {
+    public String getFormattedTimeOfCreation() {
         var dtf = DateTimeFormatter.ofPattern("d MMMM yyyy");
         var dtf2 = DateTimeFormatter.ofPattern("HH:mm");
         String date = dtf.format(createdAt);
@@ -47,7 +47,7 @@ public class Task {
         return date + " at " + time;
     }
 
-    public String getTimeOfUpdate() {
+    public String getFormattedTimeOfUpdate() {
         if (updatedAt == null) {
             return "not updated";
         }

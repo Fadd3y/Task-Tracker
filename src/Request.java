@@ -1,5 +1,5 @@
 public class Request {
-    private String action;
+    private final String action;
     private int id;
     private String description;
     private TaskStatus status;

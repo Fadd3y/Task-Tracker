@@ -3,6 +3,11 @@ import java.util.Scanner;
 public class Main {
     private static boolean isExit = false;
     private static Request request;
+    private static TaskArchive taskArchive;
+
+    static {
+        taskArchive = TaskArchive.readFromFile();
+    }
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -16,6 +21,8 @@ public class Main {
             if (request.isCorrect()) {
                 openActionsMenu(request.getAction());
             }
+
+            taskArchive.saveToFile();
         }
     }
 
@@ -31,7 +38,7 @@ public class Main {
 
     private static void addTask() {
         String description = request.getDescription();
-        TaskArchive.addTask(description);
+        taskArchive.addTask(description);
     }
 
     private static void updateTask() {
@@ -40,29 +47,25 @@ public class Main {
         int id = request.getId();
 
         switch (parameter) {
-            case "-d" -> {
-                TaskArchive.updateTask(id, description);
-            }
+            case "-d" -> taskArchive.updateTask(id, description);
             case "-s" -> {
                 var status = request.getStatus();
-                TaskArchive.updateTask(id, status);
+                taskArchive.updateTask(id, status);
             }
         }
     }
 
     private static void deleteTask() {
         int id = request.getId();
-        TaskArchive.deleteTask(id);
+        taskArchive.deleteTask(id);
     }
 
     private static void listTask() {
         if (request.getStatus() == null) {
-            TaskArchive.listTasks();
+            taskArchive.listTasks();
         } else {
             var status = request.getStatus();
-            TaskArchive.listTasks(status);
+            taskArchive.listTasks(status);
         }
-
     }
-
 }

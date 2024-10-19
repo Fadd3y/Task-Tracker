@@ -1,42 +1,44 @@
+import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.function.Supplier;
 
 public class TaskArchive {
 
-    private static int idCount = 0;
-    private static HashMap<Integer, Task> tasks = new HashMap<>();
+    private HashMap<Integer, Task> tasks = new HashMap<>();
+    private static final String ARCHIVE_DIRECTORY = "saves\\";
 
-    public static void addTask(String description) {
-        int id = ++idCount;
+    public void addTask(String description) {
+        int id = genUniqueId();
         var task = new Task(description);
         tasks.put(id, task);
     }
 
-    public static void updateTask(int id, TaskStatus status) {
+    public void updateTask(int id, TaskStatus status) {
         var task = tasks.get(id);
         task.setStatus(status);
     }
 
-    public static void updateTask(int id, String description) {
+    public void updateTask(int id, String description) {
         var task = tasks.get(id);
         task.setDescription(description);
     }
 
-    public static void deleteTask(int id) {
+    public void deleteTask(int id) {
         tasks.remove(id);
     }
 
-    public static void listTasks() {
+    public void listTasks() {
         for (var task : tasks.entrySet()) {
             System.out.printf("\n%s: %s\nID: %d\nCreated: %s\nUpdated: %s\n",
                     task.getValue().getStatus(),
                     task.getValue().getDescription(),
                     task.getKey(),
-                    task.getValue().getTimeOfCreation(),
-                    task.getValue().getTimeOfUpdate());
+                    task.getValue().getFormattedTimeOfCreation(),
+                    task.getValue().getFormattedTimeOfUpdate());
         }
     }
 
-    public static void listTasks(TaskStatus status) {
+    public void listTasks(TaskStatus status) {
         for (var task : tasks.entrySet()) {
             if (task.getValue().getStatus() != status) continue;
 
@@ -44,8 +46,29 @@ public class TaskArchive {
                     task.getValue().getStatus(),
                     task.getValue().getDescription(),
                     task.getKey(),
-                    task.getValue().getTimeOfCreation(),
-                    task.getValue().getTimeOfUpdate());
+                    task.getValue().getFormattedTimeOfCreation(),
+                    task.getValue().getFormattedTimeOfUpdate());
         }
+    }
+
+    public void saveToFile() {
+        var jsonHandler = new JsonHandler(Path.of(ARCHIVE_DIRECTORY));
+        jsonHandler.writeTaskArchiveToFile(this);
+    }
+
+    public static TaskArchive readFromFile() {
+        var jsonHandler = new JsonHandler(Path.of(ARCHIVE_DIRECTORY));
+        return jsonHandler.readTaskArchiveFromFile();
+    }
+
+    private int genUniqueId() {
+        Supplier<Integer> randomId = () -> (int) (Math.random() * 9999);
+
+        int num = randomId.get();
+        System.out.println(tasks.containsKey(num));
+        while (tasks.containsKey(num)) {
+            num = randomId.get();
+        }
+        return num;
     }
 }
