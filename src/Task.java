@@ -3,8 +3,6 @@ import java.time.format.DateTimeFormatter;
 
 public class Task {
 
-    private static int count = 0;
-    private int id;
     private String description;
     private TaskStatus status;
     private LocalDateTime createdAt;
@@ -13,14 +11,9 @@ public class Task {
     //test
 
     public Task(String description) {
-        this.id = ++count;
         this.description = description;
         this.status = TaskStatus.TODO;
         this.createdAt = LocalDateTime.now();
-    }
-
-    public int getId() {
-        return id;
     }
 
     public void setDescription(String description) {
