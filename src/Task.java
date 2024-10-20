@@ -7,8 +7,8 @@ public class Task {
     private int id;
     private String description;
     private TaskStatus status;
-    public LocalDateTime createdAt;
-    public LocalDateTime updatedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public Task(String description) {
         this.id = ++count;

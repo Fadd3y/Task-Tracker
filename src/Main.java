@@ -21,8 +21,6 @@ public class Main {
             if (request.isCorrect()) {
                 openActionsMenu(request.getAction());
             }
-
-            taskArchive.saveToFile();
         }
     }
 
@@ -32,6 +30,7 @@ public class Main {
             case "update" -> updateTask();
             case "delete" -> deleteTask();
             case "list" -> listTask();
+            case "help" -> System.out.println(ErrorText.HELP_TEXT);
             case "exit" -> isExit = true;
         }
     }

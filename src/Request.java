@@ -13,7 +13,7 @@ public class Request {
             case "add" -> handleAdd(request);
             case "delete" -> handleDelete(request);
             case "update" -> handleUpdate(request);
-            case "exit" -> isCorrect = true;
+            case "exit", "help" -> isCorrect = true;
             case "list" -> handleList(request);
             default -> System.out.println(ErrorText.WRONG_ACTION_TYPE);
         }

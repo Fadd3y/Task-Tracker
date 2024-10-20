@@ -11,20 +11,33 @@ public class TaskArchive {
         int id = genUniqueId();
         var task = new Task(description);
         tasks.put(id, task);
+        saveToFile();
     }
 
     public void updateTask(int id, TaskStatus status) {
         var task = tasks.get(id);
         task.setStatus(status);
+        saveToFile();
     }
 
     public void updateTask(int id, String description) {
+        if (!tasks.containsKey(id)) {
+            System.out.println(ErrorText.TASK_NOT_FOUND);
+            return;
+        }
+
         var task = tasks.get(id);
         task.setDescription(description);
+        saveToFile();
     }
 
     public void deleteTask(int id) {
+        if (!tasks.containsKey(id)) {
+            System.out.println(ErrorText.TASK_NOT_FOUND);
+            return;
+        }
         tasks.remove(id);
+        saveToFile();
     }
 
     public void listTasks() {
@@ -51,7 +64,7 @@ public class TaskArchive {
         }
     }
 
-    public void saveToFile() {
+    private void saveToFile() {
         var jsonHandler = new JsonHandler(Path.of(ARCHIVE_DIRECTORY));
         jsonHandler.writeTaskArchiveToFile(this);
     }
@@ -65,7 +78,6 @@ public class TaskArchive {
         Supplier<Integer> randomId = () -> (int) (Math.random() * 9999);
 
         int num = randomId.get();
-        System.out.println(tasks.containsKey(num));
         while (tasks.containsKey(num)) {
             num = randomId.get();
         }
